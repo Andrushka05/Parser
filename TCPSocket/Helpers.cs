@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -224,6 +225,74 @@ namespace TCPSocket
 
             }
             return result;
+        }
+
+
+
+        public static KeyValuePair<object, object> Cast<K, V>(this KeyValuePair<K, V> kvp)
+        {
+            return new KeyValuePair<object, object>(kvp.Key, kvp.Value);
+        }
+
+        public static KeyValuePair<T, V> CastFrom<T, V>(Object obj)
+        {
+            return (KeyValuePair<T, V>)obj;
+        }
+        /// <summary>
+        /// Конвертировать object to Dictionary
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static KeyValuePair<object, object> CastFrom(Object obj)
+        {
+            var type = obj.GetType();
+            if (type.IsGenericType)
+            {
+                if (type == typeof(KeyValuePair<,>))
+                {
+                    var key = type.GetProperty("Key");
+                    var value = type.GetProperty("Value");
+                    var keyObj = key.GetValue(obj, null);
+                    var valueObj = value.GetValue(obj, null);
+                    return new KeyValuePair<object, object>(keyObj, valueObj);
+                }
+            }
+            throw new ArgumentException(" ### -> public static KeyValuePair<object , object > CastFrom(Object obj) : Error : obj argument must be KeyValuePair<,>");
+        }
+
+        public static Dictionary<TKey, TValue> ConvertToDictionary<TKey, TValue>(object obj)
+        {
+            var stringDictionary = obj as Dictionary<TKey, TValue>;
+
+            if (stringDictionary != null)
+            {
+                return stringDictionary;
+            }
+            var baseDictionary = obj as IDictionary;
+
+            if (baseDictionary != null)
+            {
+                var dictionary = new Dictionary<TKey, TValue>();
+                foreach (DictionaryEntry keyValue in baseDictionary)
+                {
+                    if (!(keyValue.Value is TValue))
+                    {
+                        // value is not TKey. perhaps throw an exception
+                        return null;
+                    }
+                    if (!(keyValue.Key is TKey))
+                    {
+                        // value is not TValue. perhaps throw an exception
+                        return null;
+                    }
+
+                    dictionary.Add((TKey)keyValue.Key, (TValue)keyValue.Value);
+                }
+                return dictionary;
+            }
+            // object is not a dictionary. perhaps throw an exception
+            return null;
+
         }
     }
 }
