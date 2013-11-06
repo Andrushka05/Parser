@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParseLib", "ParseLib\ParseLib.csproj", "{0402A985-1455-4DBA-9BB5-235CA3F447C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParseLibUnitTest", "ParseLibUnitTest\ParseLibUnitTest.csproj", "{39BB6494-0A43-4602-9B32-6D61350E178D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPSocket", "D:\Projects\Parser\TCPSocket\TCPSocket.csproj", "{21719B3C-937F-4998-823C-C10D11EFE078}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0402A985-1455-4DBA-9BB5-235CA3F447C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0402A985-1455-4DBA-9BB5-235CA3F447C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0402A985-1455-4DBA-9BB5-235CA3F447C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0402A985-1455-4DBA-9BB5-235CA3F447C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39BB6494-0A43-4602-9B32-6D61350E178D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39BB6494-0A43-4602-9B32-6D61350E178D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39BB6494-0A43-4602-9B32-6D61350E178D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39BB6494-0A43-4602-9B32-6D61350E178D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21719B3C-937F-4998-823C-C10D11EFE078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21719B3C-937F-4998-823C-C10D11EFE078}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21719B3C-937F-4998-823C-C10D11EFE078}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21719B3C-937F-4998-823C-C10D11EFE078}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
