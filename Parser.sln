@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csproj", "{5AF25E5C-3D3F-4D3B-8AE5-5C5ADFE2E64A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPSocket", "TCPSocket\TCPSocket.csproj", "{21719B3C-937F-4998-823C-C10D11EFE078}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParseLib", "C:\Users\Andrey\Documents\Visual Studio 2012\Projects\ParseLib\ParseLib\ParseLib.csproj", "{0402A985-1455-4DBA-9BB5-235CA3F447C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParseLibUnitTest", "C:\Users\Andrey\Documents\Visual Studio 2012\Projects\ParseLib\ParseLibUnitTest\ParseLibUnitTest.csproj", "{39BB6494-0A43-4602-9B32-6D61350E178D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AF25E5C-3D3F-4D3B-8AE5-5C5ADFE2E64A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AF25E5C-3D3F-4D3B-8AE5-5C5ADFE2E64A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AF25E5C-3D3F-4D3B-8AE5-5C5ADFE2E64A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AF25E5C-3D3F-4D3B-8AE5-5C5ADFE2E64A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21719B3C-937F-4998-823C-C10D11EFE078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21719B3C-937F-4998-823C-C10D11EFE078}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21719B3C-937F-4998-823C-C10D11EFE078}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21719B3C-937F-4998-823C-C10D11EFE078}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0402A985-1455-4DBA-9BB5-235CA3F447C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0402A985-1455-4DBA-9BB5-235CA3F447C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0402A985-1455-4DBA-9BB5-235CA3F447C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0402A985-1455-4DBA-9BB5-235CA3F447C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39BB6494-0A43-4602-9B32-6D61350E178D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39BB6494-0A43-4602-9B32-6D61350E178D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39BB6494-0A43-4602-9B32-6D61350E178D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39BB6494-0A43-4602-9B32-6D61350E178D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
