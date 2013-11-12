@@ -660,7 +660,7 @@
                     this.sessionIncluded.purchases = this.request.b[0].bv.length;
                     this.sessionIncluded.errors =
                         this.request.b[0].by.length;
-                    break
+                    break;
                 }
                 d.push(this.request = this.xb(this.request))
             }
@@ -677,9 +677,9 @@
                     a.b[0].bv.length === 0 ? this.level = 3 : a.b[0].bv = this.R(a.b[0].bv);
                     break;
                 case 3:
-                    a.b[0].bo.length === 0 ? this.level = 4 : a.b[0].bo = this.R(a.b[0].bo)
+                    a.b[0].bo.length === 0 ? this.level = 4 : a.b[0].bo = this.R(a.b[0].bo);
             }
-            return a
+            return a;
         };
         a.prototype.R = function (a) {
             var d;
