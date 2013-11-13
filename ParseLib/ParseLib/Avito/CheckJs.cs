@@ -80,10 +80,10 @@ namespace ParseLib.Avito
     {
         public string bp { get; set; }
         public int ce { get; set; }
-        public int bq { get; set; }
+        public long bq { get; set; }
         public object bs { get; set; }
         public bool timed { get; set; }
-        public int br { get; set; }
+        public long br { get; set; }
     }
     /// <summary>
     /// {level: 0 request: a{} sessionIncluded: Object{ errors: 0 events: 2 purchases: 0 } sessionsIncluded: 0}
@@ -146,11 +146,11 @@ namespace ParseLib.Avito
         ///age: 0
         public int age { get; set; }
         //ba: 1382867611139
-        public int ba { get; set; }
+        public long ba { get; set; }
         ///bb: 0
-        public int bb { get; set; }
+        public long bb { get; set; }
         ///bc: 192696
-        public int bc { get; set; }
+        public long bc { get; set; }
         ///bd: ""
         public string bd { get; set; }
         ///be: ""
@@ -162,7 +162,7 @@ namespace ParseLib.Avito
         ///bk: -1
         public int bk { get; set; }
         ///bl: 0
-        public int bl { get; set; }
+        public long bl { get; set; }
         ///bm: false
         public bool bm { get; set; }
         ///bn: Object
@@ -198,7 +198,7 @@ namespace ParseLib.Avito
         ///numPurchasesLogged: 0
         public int numPurchasesLogged { get; set; }
         ///pauseTimestamp: "1382867984840"
-        public int pauseTimestamp { get; set; }
+        public long pauseTimestamp { get; set; }
         ///purchaseCounter: 0
         public int purchaseCounter { get; set; }
         ///requestsMade: 0
@@ -231,7 +231,7 @@ namespace ParseLib.Avito
         public int level { get; set; }
         public int sessionsIncluded { get; set; }
         public X request { get; set; }
-        public object sessionIncluded { get; set; }
+        public AFb sessionIncluded { get; set; }
 
         public void a_prototype_Za(string a,string d,string b,string c,string e,string j,A k,List<A> l,object m) {
             request = new X(10, 9, a, d, b, c, e, j, k, l, m);
@@ -293,7 +293,7 @@ namespace ParseLib.Avito
 
     public class Xa
     {
-        public int af { get; set; }
+        public long af { get; set; }
         public int aa { get; set; }
         public int ab { get; set; }
         public int ac { get; set; }
@@ -305,33 +305,27 @@ namespace ParseLib.Avito
         public string ai { get; set; }
         public string aj { get; set; }
         public int ak { get; set; }
-        public List<string> za(A a) {
-            var c, d, f, k, l, m;
+        public Dictionary<string,object> za(A a) {
             var f = new Dictionary<string,object>();
-            var tempA=Helpers.ConvertToDictionary<string,object>(a);
-
+            var tempA= Helpers.ConvertToDictionary<string,object[]>(a);
             foreach (var d in tempA)
             {
-                var k = d.Value;
-                if (d.Key == "bf")
-                    k.bg != null? f.Add(d.Key,k):0;
+                var k = d;
+                if (d.Key == "bf"&&d.Value[0] != null)
+                    f.Add(d.Key,k);
                 else if (d.Key == "bo")
                 {
                     //f[d] = [];
-                    for (l = 0, m = k.Count; l < m; l++)
+                    var temp = new List<object>();
+                    for (int l = 0, m = k.Value.Count(); l < m; l++)
                     {
-                        var c = k[l];
-                        var dd = new Dictionary<string,object>();
-                        for (var c1 in c)
-                        {
-                            f = a[c1];
-                            this.zb.hasOwnProperty(c) || (dd[c] = f);
-                        }
-                        f[d].Add(dd);
+                        var c = k.Value[l];
+                        temp.Add(c);
                     }
+                    f[d.Key]=temp;
                 }
                 else
-                    if(!Ab.Contains(d+":")) f[d] = k;
+                    if(!Ab.Contains(d.Key+":")) f.Add(d.Key,k.Value);
             }
             return f;
         }
@@ -346,7 +340,7 @@ namespace ParseLib.Avito
         public List<string> bX ;
         public X(int b, int c, string e, string j, string k, string l, string m, string r, A s, List<A> C, object u)
         {
-            var a = new Xa {af = DateTime.Now.Millisecond, aa = f, ab = b, ac = c, ae = e, ad = j, ag = k, ah = s.ba};
+            var a = new Xa {af = (long)((DateTime.Now-d1970).TotalMilliseconds), aa = f, ab = b, ac = c, ae = e, ad = j, ag = k, ah = s.ba};
             //a.g("about to check if firstPartyCookieUID " + u + " should be assigned to global map in the report request");
             if (u != null)
                 a.cg = u;
@@ -362,7 +356,7 @@ namespace ParseLib.Avito
             if(s!=null)
             {
                 //s.Oa();   this[a.c.duration] = Date.now() - this[a.c.timestamp]
-                s.bb = DateTime.Now.Millisecond - s.ba;
+                s.bb = (long)((DateTime.Now-d1970).TotalMilliseconds) - s.ba;
                 var ee = a.za(s);
                 bX.AddRange(ee);
             };
@@ -386,7 +380,7 @@ namespace ParseLib.Avito
         }
         
         public string a_prototype_Kb() {
-            this.a.af = Date.now()
+            this.a.af = (long)((DateTime.Now-d1970).TotalMilliseconds)
         }
     }
 }

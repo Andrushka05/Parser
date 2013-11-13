@@ -182,6 +182,15 @@ namespace ParseLib.Avito
                     ul.SelectNodes("//a[contains(concat(' ', @id, ' '), ' showPhoneBtn ')]").First().Attributes["href"]
                         .Value;
                 phoneUrl = "http://m.avito.ru" + phoneUrl+"?async";
+
+                //<script type="text/javascript" async="" src="https://data.flurry.com/aah.do?d=eyJhIjp7ImFmIjoxMzg0Mjg1MzQxNjU2LCJhYSI6MSwiYWIiOjEwLCJhYyI6OSwiYWUiOiJtb2JpbGUiLCJhZCI6IkJZQ1I1SkhKSkRSUVpLMlZQRERRIiwiYWciOjEzODIzNzE3MDk2NjIsImFoIjoxMzg0Mjg1MTE4MDI0LCJjZyI6IlNHMDk3OEZFOERGMzZERTk4QUM5NDJFQzIyMURDRDM1NDA0NTY2Rjg2MSIsImFpIjoiV2luMzIiLCJhaiI6Imh0dHA6Ly9tLmF2aXRvLnJ1L3Bza292L2t2YXJ0aXJ5IiwiYWsiOjF9LCJiIjpbeyJiZCI6Im1vYmlsZSIsImJlIjoiIiwiYmsiOi0xLCJibCI6MCwiYmoiOiJydSIsImJvIjpbXSwiYm0iOmZhbHNlLCJibiI6e30sImJ2IjpbXSwiYnQiOmZhbHNlLCJidSI6e30sImJ5IjpbXSwiY2QiOjAsImJhIjoxMzg0Mjg1MTE4MDI0LCJiYiI6MjI3MDQyLCJiYyI6LTEsImNoIjoiRXRjL0dNVC00In1dfQ==&amp;c=4035538312"></script>
+                //FlurryAgent.startSession("BYCR5JHJJDRQZK2VPDDQ");
+                string allHtml = html.DocumentNode.SelectNodes("//body").First().InnerHtml;
+                var beginKey = allHtml.IndexOf("startSession")+14;
+                var endKey = allHtml.IndexOf(");", beginKey + 3)-1;
+                var key = allHtml.Substring(beginKey,endKey-beginKey);
+                AvJs avJs=new AvJs(key,cookie,link);
+                var valJs = avJs.GetLinkAndCoockie();
                 var phoneReq = socks.GetResponse(phoneUrl,refererLink:link, cookie:cookie);
                 var phone = GetPhone(phoneUrl, cookie);
                 Avito avito = new Avito()

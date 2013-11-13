@@ -22,6 +22,20 @@ namespace ParseLib.Avito
             t_a_Fb();
             
         }
+        /// <summary>
+        /// Возвращает новый cookie и линк зашифрованный
+        /// </summary>
+        /// <returns>List(){ResultLink,cookie}</returns>
+        public List<string> GetLinkAndCoockie()
+        {
+            //t_a_da("mobile");
+            t_a_appVersion = "mobile";
+            t_a_i = true;
+            t_a_Ra(t_a_O);
+            return new List<string>(){ResultLink,cookie};
+        } 
+        public string ResultLink { get; set; }
+        public DateTime d1970=new DateTime(1970,1,1);
         public string cookie { get; set; }
         public A A;
         ///a.i = h;
@@ -33,7 +47,7 @@ namespace ParseLib.Avito
         ///a.Ha = 0;
         public int t_a_Ha = 0;
         ///a.ka = Date.now();
-        public string t_a_ka = DateTime.Now.ToLongTimeString();
+        public string t_a_ka = (long)((DateTime.Now-d1970).TotalMilliseconds);
         ///a.Da = i;
         public object t_a_Da = null;
         ///a.F = i;
@@ -60,8 +74,8 @@ namespace ParseLib.Avito
         public A t_a_e = null;
         ///a.$ = [];
         public List<A> t_a_S;
-        ///a.w = i;
-        public object t_a_w = null;
+        ///a.w = i; Y.request
+        public X t_a_w = null;
         ///a.Y = 5E3;
         public int t_a_Y = 300000;
         ///a.ea = i;
@@ -216,9 +230,11 @@ namespace ParseLib.Avito
             }
             return j;
         }
-        //проверочная сумма предаётся как параметры c= к ссылке флюри
-        //а="{"a":{"af":1382981724491,"aa":1,"ab":10,"ac":9,"ae":"","ad":"BYCR5JHJJDRQZK2VPDDQ","ag":1382371709662,"ah":1382981634346,"cg":"SG0978FE8DF36DE98AC942EC221DCD35404566F861","ai":"Win32","aj":"http://m.avito.ru/pskov/kvartiry","ak":1},"b":[{"bd":"","be":"","bk":-1,"bl":0,"bj":"ru","bo":[],"bm":false,"bn":{},"bv":[],"bt":false,"bu":{},"by":[],"cd":0,"ba":1382981634346,"bb":90145,"bc":36612,"ch":"Etc/GMT-4"}]}"
-        //return c=4231817511
+        /// <summary>
+        /// проверочная сумма предаётся как параметры c= к ссылке флюри
+        /// </summary>
+        /// <param name="a">а="{"a":{"af":1382981724491,"aa":1,"ab":10,"ac":9,"ae":"","ad":"BYCR5JHJJDRQZK2VPDDQ","ag":1382371709662,"ah":1382981634346,"cg":"SG0978FE8DF36DE98AC942EC221DCD35404566F861","ai":"Win32","aj":"http://m.avito.ru/pskov/kvartiry","ak":1},"b":[{"bd":"","be":"","bk":-1,"bl":0,"bj":"ru","bo":[],"bm":false,"bn":{},"bv":[],"bt":false,"bu":{},"by":[],"cd":0,"ba":1382981634346,"bb":90145,"bc":36612,"ch":"Etc/GMT-4"}]}"</param>
+        /// <returns>c=4231817511</returns>
         public string q_a_bb(string a) {
             var d=1;
             var b=0;
@@ -243,17 +259,9 @@ namespace ParseLib.Avito
         /// <returns>"{"ba":1382719047026,"bc":-1,"eventCounter":0,"purchaseCounter":0,"errorCounter":0,"timedEvents":[]}"</returns>
         public Fb t_f(string a)
         {
-            var b = "";
-            
-            try
-            {
-                b = p_a_lb(a);
-               var c = JsonConvert.DeserializeObject<Fb>(b);
-                return c;
-            } catch (Exception) {
-                //console.log(e)
-            }
-            return null;
+            var b = p_a_lb(a);
+            var c = JsonConvert.DeserializeObject<Fb>(b);
+            return c;
         }
         /// <summary>
         /// {"install", "fit"},{"session", "fs"},{"lastPoll", "flp"},{"firstPartyCookie", "fid"}
@@ -282,24 +290,18 @@ namespace ParseLib.Avito
         }
 
 
-        //вызывается из страницы строчкой FlurryAgent.setAppVersion("mobile");  a=mobile
-        public void t_a_da(object a) {
-            //this.g("setAppVersion(" + a + ") called");
-            try {
-                // A.o(a)
-                if(a is string){
-                    //A.z(a)
-                    var str = a.ToString().Trim();
-                    //A.p(a.length, 255)
-                    if (str.Length > 255)
-                    {
-                        t_a_appVersion = str;
-                        //this.e && this.e.da(a)->this[a.c.appVersion] = str->bd="mobile"
-                        bd = str;
-                        t_a_i = true;
-                    }
-                }
-            } catch (Exception){/*t_a_h(b);*/}
+        /// <summary>
+        /// вызывается из страницы строчкой FlurryAgent.setAppVersion("mobile");  a=mobile
+        /// </summary>
+        /// <param name="a"></param>
+        public void t_a_da(string a) {
+            if (a.Length > 255)
+            {
+                t_a_appVersion = a;
+                //this.e && this.e.da(a)->this[a.c.appVersion] = str->bd="mobile"
+                //t_a_bd = a;
+                t_a_i = true;
+            }
         }
        
         public void t_a_ra(string a) {
@@ -318,8 +320,8 @@ namespace ParseLib.Avito
                 var temp = (int) a;
                 A.age = temp;
                 t_a_i = true;
-                var b = DateTime.Now;
-                A.bl = new DateTime(b.Year - temp-1970, b.Month, 1).Millisecond;
+                var b = (long)((DateTime.Now-d1970).TotalMilliseconds);
+                A.bl = (long)((DateTime.Now-d1970).TotalMilliseconds);
                 t_a_i = true;
             }
         }
@@ -358,20 +360,20 @@ namespace ParseLib.Avito
             t_a_localStorage = a;
         }
         public void t_a_kb() {
-            var a, b, c = this;
-            b = window.onfocus;
-            window.onfocus = function () {
-                c.g("ACTIVE");
-                b != i && b();
-                if (c.e) return c.e.Ma() ? c.ta() : (c.A(), c.Ra(c.O))
-            };
-            a = window.onblur;
-            window.onblur = function () {
-                var b;
-                c.g("PAUSE");
-                a != i && a();
-                if (c.e && (b = Date.now(), c.e.Pa(b), c.Q(), c.Bb)) return c.q()
-            }
+            //var a, b, c = this;
+            //b = window.onfocus;
+            //window.onfocus = function () {
+            //    c.g("ACTIVE");
+            //    b != i && b();
+            //    if (c.e) return c.e.Ma() ? c.ta() : (c.A(), c.Ra(c.O))
+            //};
+            //a = window.onblur;
+            //window.onblur = function () {
+            //    var b;
+            //    c.g("PAUSE");
+            //    a != i && a();
+            //    if (c.e && (b = (long)((DateTime.Now-d1970).TotalMilliseconds), c.e.Pa(b), c.Q(), c.Bb)) return c.q()
+            //}
         }
         public void t_a_jb()
         {
@@ -392,7 +394,12 @@ namespace ParseLib.Avito
                     t_a_K("firstPartyCookie", t_a_F, false);
         }
 
-        //Вытаскивает из кук _fit=i, _fid, по умолчанию b=true
+        /// <summary>
+        /// Вытаскивает из кук _fit=i, _fid, по умолчанию b=true
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public string t_a_G(string a,bool b=true) {
             var c="";
             var f="";
@@ -446,15 +453,18 @@ namespace ParseLib.Avito
             e=e.AddYears(10);
             cookie += t_a_ga(a, c) + "=" + b + "; expires=" + e.ToString("R") + "; path=/";
         }
-        //Вызывается из t_a_kb во время движения по странице
-        public void t_a_ta(int a) {
-            var b = this;
+        /// <summary>
+        /// Вызывается из t_a_kb во время движения по странице
+        /// </summary>
+        /// <param name="a"></param>
+        public void t_a_ta(int a=0) {
+            var b = null;
             t_a_Q();
             if (a>0) 
                 t_a_Y = Convert.ToInt32(a * 1E3);
             t_a_fa = window.setInterval(function () {
-                b.ea = DateTime.Now;//1383498256608
-                t_a_K("lastPoll", DateTime.Now.ToString());
+                b.ea = (long)((DateTime.Now-d1970).TotalMilliseconds);//1383498256608
+                t_a_K("lastPoll", (long)((DateTime.Now-d1970).TotalMilliseconds));
                 //return b.q()
             }t_a_Y); 
             //t_a_ea && Date.now() - this.ea > this.Y && this.q(); Y=5000
@@ -513,7 +523,7 @@ namespace ParseLib.Avito
                 by = null,
                 numErrorsLogged = 0,
                 cd=0,
-                ba = xx!=null?xx.ba:DateTime.Now.Millisecond,
+                ba = xx!=null?xx.ba:(long)((DateTime.Now-d1970).TotalMilliseconds),
                 bb=0,
                 eventLogging = true,
                 sessionContinue = 300000,
@@ -533,28 +543,144 @@ namespace ParseLib.Avito
             if (t_a_e==null) {
                 a=a.Trim();
                 t_a_O = a;//this.O = a;
-                t_a_Fb();//this.Fb();
+                
+                //t_a_Fb();//this.Fb();---------------------------------
+                t_a_Da = p_a_ia(t_a_O).Replace("=", "") + "_";//--------
+                
                 t_a_i = true;//this.i = h;//true
                 //this.e = this.$a();//Возвращает а с значениями по умолчанию, кроме пары полей таймзоны, ba,bj, ch
                 t_a_e = t_a_Sa();
+
                 //this.jb();//this.ka=приравнивается значение кук _fit
-                t_a_jb();
-                t_a_Ca();//this.Ca();//this.F =_fid.value
-                if (!t_a_eb())//_fit.value!=null
+                //t_a_jb();**********************************************
+                var aa = t_a_G("install");
+                var num = Regex.Replace(aa, @"", "");
+                if(num.Length==a.Length)
+                    t_a_ka = aa;
+                else
+                    t_a_K("install", t_a_ka);//**************************
+
+                //t_a_Ca();//this.Ca();//this.F =_fid.value+++++++++++++++++++++++++++++
+                var aaa = t_a_G("firstPartyCookie", false);
+                if (aaa != null)
+                    t_a_F = aaa;
+                else
+                    if(t_a_F != null) 
+                        t_a_K("firstPartyCookie", t_a_F, false);//++++++++++++++++++++++
+                
+                if (t_a_G("install") == null)//!t_a_eb())//_fit.value!=null
                 {
                     t_a_Ka = n;
-                    t_a_A();
+                    //t_a_A();----------------------------------------------------------------------
+                    
+                    //t_a_Q();=====================
+                    //if(t_a_fa!=null)
+                        //window.clearInterval(t_a_fa);
+                    t_a_fa = null;//================
+                    
+                    if (t_a_e!=null) {/*return*/
+
+                        //a_prototype_A();***********************************************
+                        
+                        //a_prototype_ob();@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Сброс timedEvents
+                        var f = A.timedEvents;
+                        for (int b = 0, c = f.Count; b < c; b++)
+                        {
+                            var d = f[b];
+                            d.br = (long)((DateTime.Now-d1970).TotalMilliseconds) - (A.ba + d.bq);
+
+                            //a_prototype_t(d);################################## Добавление EventO in bo
+                            if (A.eventLogging && A.numEventsLogged < 1E3)
+                            {
+                                //return d.timed && !d.br ? this[a.c.k].push(d) : (this[a.c.D].push(d),this[a.c.V]++)
+                                if(d.br<0)
+                                {
+                                    //A.timedEvents.Add();
+                                }
+                                else
+                                {
+                                    A.bo.Add(d);
+                                    A.numEventsLogged++;
+                                }
+                            }//##################################################
+                        }
+                        A.timedEvents = new List<EventO>();//@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+                        //this.Oa(); -> this[a.c.duration] = Date.now() - this[a.c.timestamp]
+                        A.bb = (long)((DateTime.Now-d1970).TotalMilliseconds) - A.ba;
+                        //this[a.c.V] < 1E3 && (this[a.c.Aa] = n);
+                        if (A.numEventsLogged < 1E3)
+                            A.bm = n;
+                        // if (this[a.c.W] < 100)return this[a.c.Ba] = n
+                        if (A.numPurchasesLogged < 100)
+                            A.bt = n;//**************************************************
+
+                        t_a_i = h;
+                        if (t_a_Ka) 
+                            t_a_q(); 
+                        else t_a_S.Add(t_a_e);
+                        t_a_e = null;
+                        t_a_ha("session");
+                    }//-----------------------------------------------------------------------------
                 }
                 if(!(t_a_Ha>0))
                 {
-                    t_a_ib();//this.ib(this.Ja=navigator.platform "Win32", this.referrer = document.referrer)
-                    t_a_kb();
+                    //t_a_ib();//this.ib(this.Ja=navigator.platform "Win32", this.referrer = document.referrer)
+                    t_a_Ja = "Win32";
+
+                    //t_a_kb();-------------------------Не нужно
+                    //var a, b, c = this;
+                    //b = window.onfocus;
+                    //window.onfocus = function () {
+                        //c.g("ACTIVE");
+                        //b != i && b();
+                    if (t_a_e != null) //return c.e.Ma() ? c.ta() : (c.A(), c.Ra(c.O))
+                    {
+                        //a_prototype_Ma();$$$$$$$$$$$$$$$$$$$$$$$$
+                        var d = A.pauseTimestamp > 0 ? (long)((DateTime.Now-d1970).TotalMilliseconds) - A.pauseTimestamp : 0;
+                         //d > 0 && (this[a.c.u] === -1 && (this[a.c.u] = 0), this[a.c.u] += d, this[a.c.r] = 0);return d < this[a.c.pa]
+                         if (d > 0)
+                         {
+                             if (A.bc == -1)
+                                 A.bc = 0;
+                             A.bc += d;
+                             A.pauseTimestamp = 0;
+                         }
+                        if (d < A.sessionContinue) //$$$$$$$$$$$$$
+                        {
+                            //c.ta()****************************************************
+                            //t_a_Q();
+                            //t_a_fa = window.setInterval(function () {
+                            //    b.ea = (long)((DateTime.Now-d1970).TotalMilliseconds);//1383498256608
+                            //    t_a_K("lastPoll", (long)((DateTime.Now-d1970).TotalMilliseconds));
+                            //    //return b.q()
+                            //}t_a_Y); 
+                            //t_a_ea && Date.now() - this.ea > this.Y && this.q(); Y=5000
+                            if (t_a_ea != null && (DateTime.Now - d1970).TotalMilliseconds > t_a_Y)
+                                t_a_q(); //**********************************************
+                        }
+                        else
+                        {
+                            t_a_A();
+
+                        }
+                    }
+                    //};
+                    //a = window.onblur;
+                    //window.onblur = function () {
+                    //    var b;
+                    //    c.g("PAUSE");
+                    //    a != i && a();
+                    //    if (c.e && (b = (long)((DateTime.Now-d1970).TotalMilliseconds), c.e.Pa(b), c.Q(), c.Bb)) return c.q()
+                    //}//----------------------------------
                 } 
                 t_a_ta(0);
                 t_a_q();//создаёт тег скрипт ссылающий на флюре
                 t_a_Ha++;
             }
         }
+
         public void t_a_A()
         {
             t_a_Q();
@@ -581,7 +707,7 @@ namespace ParseLib.Avito
             //A.j(this.e), a = Date.now(), this.e.Pa(a), this.Tb = a, this.K("session", this.e.Ya()), this.K("lastPoll", a)
             if (t_a_e != null)
             {
-                var a = DateTime.Now.Millisecond;
+                var a = (long)((DateTime.Now-d1970).TotalMilliseconds);
                 A.pauseTimestamp = a;
                 t_a_Tb = a;
                 t_a_K("session",a_prototype_Ya());
@@ -603,7 +729,7 @@ namespace ParseLib.Avito
             //return A.j(this.e), this.e.pb(a, b), this.i = h
             if (t_a_e != null)
             {
-
+                a_prototype_pb(a,b);
                 t_a_i = h;
             }
         }
@@ -645,45 +771,84 @@ namespace ParseLib.Avito
                 return this.h(e)
             }
         }
-        //Создаёт тег скрипт ссылающий на флюре дата
+        /// <summary>
+        /// Создаёт ссылку для запроса к серверу
+        /// </summary>
         public void t_a_q() {
             //this.g("REQUEST INITIATED");
-            if (!this.I) {
-                    if (this.w) this.w.Kb();
-                    else if (this.i)
+            if (!t_a_I) {
+                /*if (t_a_w!=null) this.w.Kb();
+                else */if (t_a_i)
+                {
+                    var a = new Y();
+                    a.a_prototype_Za(t_a_appVersion, t_a_O, t_a_ka, t_a_Ja, null /*t_a_Rb*/, t_a_referrer, t_a_e, t_a_S,
+                        t_a_F);
+                    t_a_w = a.request;
+                    //t_a_fb(a);-------------------------------
+                    //a_prototype_gb(a.sessionIncluded.events, a.sessionIncluded.purchases, a.sessionIncluded.errors);*************
+                    //this[a.c.D] = this[a.c.D].slice(d);
+                    A.bo = A.bo.GetRange(a.sessionIncluded.events,A.bo.Count-a.sessionIncluded.events);
+                    //this[a.c.s] = {};
+                    A.bn=new List<TotalEvent>();
+                    //this[a.c.X] = this[a.c.X].slice(b);
+                    A.bv = A.bv.GetRange(a.sessionIncluded.purchases,);
+                    //this[a.c.v] = {};
+                    A.bu=new object();
+                    //this[a.c.S] = this[a.c.S].slice(c)
+                    A.by = A.by.GetRange(a.sessionIncluded.errors,A.by.Count-a.sessionIncluded.errors);//************************
+
+                    //this.$ = this.$.slice(a.sessionsIncluded);
+                    if(a.sessionsIncluded>0)
+                        t_a_S = t_a_S.GetRange(a.sessionsIncluded,t_a_S.Count-a.sessionsIncluded);
+                    if (a.level == 0) t_a_i = false;//----------
+                    
+                }
+                if (t_a_w != null)
+                {
+                    //t_a_Na();---------------
+                    //A.j(this.e), a = Date.now(), this.e.Pa(a), this.Tb = a, this.K("session", this.e.Ya()), this.K("lastPoll", a)
+                    if (t_a_e != null)
                     {
-                        var a = new Y();
-                        a.a_prototype_Za(t_a_appVersion, t_a_O, t_a_ka, t_a_Ja, null/*t_a_Rb*/, t_a_referrer, t_a_e, t_a_S, t_a_F),
-                        this.w = a.request,
-                        this.fb(a);
-                    }
-                if (this.w) return this.Na(), this.rb(JSON.stringify(this.w))
+                        var a = (long)((DateTime.Now-d1970).TotalMilliseconds);
+                        A.pauseTimestamp = a;
+                        //t_a_Tb = a;
+                        t_a_K("session",a_prototype_Ya());
+                        t_a_K("lastPoll", a.ToString());
+                    }//-----------------------
+                    
+                    //t_a_rb(JSON.stringify(t_a_w));
+                    var temp = JsonConvert.SerializeObject(t_a_w);
+                    ResultLink = x_Fa + "?d=" + p_a_ia(temp) + "&c=" + q_a_bb(temp);
+                }
                 }
         }
         //a={level: 0 request: a{} sessionIncluded: Object{ errors: 0 events: 2 purchases: 0 } sessionsIncluded: 0}
-        public void t_a_fb(AFb a) {
-            a_prototype_gb(a.events, a.purchases, a.errors);
+        public void t_a_fb(Y a) {
+            a_prototype_gb(a.sessionIncluded.events, a.sessionIncluded.purchases, a.sessionIncluded.errors);
             //this.$ = this.$.slice(a.sessionsIncluded);
             if(a.sessionsIncluded>0)
                 t_a_S = t_a_S.GetRange(a.sessionsIncluded,t_a_S.Count-a.sessionsIncluded);
             if (a.level == 0) t_a_i = false;
         }
-        //создаёт тэг скрипт с src на флюре дата и после его выполнения делаеться запрос
-        //a="{"a":{"af":1383500358983,"aa":1,"ab":10,"ac":9,"ae":"mobile","ad":"BYCR5JHJJDRQZK2VPDDQ","ag":1382371709662,"ah":1383499767854,"cg":"SG0978FE8DF36DE98AC942EC221DCD35404566F861","ak":1},"b":[{"bd":"mobile","be":"","bk":-1,"bl":0,"bj":"ru","bo":[{"ce":1,"bp":"environment","bq":364163,"bs":{"os":"","grade":"A","mobile":"","browser":"","device":"","isBot":"0"},"br":0},{"ce":2,"bp":"PageView","bq":385294,"bs":{},"br":0}],"bm":false,"bn":{"environment":1,"PageView":1},"bv":[],"bt":false,"bu":{},"by":[],"cd":0,"ba":1383499767854,"bb":591130,"bc":-1,"ch":"Etc/GMT-4"}]}"
-        public void t_a_rb(string a) {
-            var b, c = this;
+        
+        /// <summary>
+        /// Создаёт ссылку запроса 
+        /// </summary>
+        /// <param name="a">a="{"a":{"af":1383500358983,"aa":1,"ab":10,"ac":9,"ae":"mobile","ad":"BYCR5JHJJDRQZK2VPDDQ","ag":1382371709662,"ah":1383499767854,"cg":"SG0978FE8DF36DE98AC942EC221DCD35404566F861","ak":1},"b":[{"bd":"mobile","be":"","bk":-1,"bl":0,"bj":"ru","bo":[{"ce":1,"bp":"environment","bq":364163,"bs":{"os":"","grade":"A","mobile":"","browser":"","device":"","isBot":"0"},"br":0},{"ce":2,"bp":"PageView","bq":385294,"bs":{},"br":0}],"bm":false,"bn":{"environment":1,"PageView":1},"bv":[],"bt":false,"bu":{},"by":[],"cd":0,"ba":1383499767854,"bb":591130,"bc":-1,"ch":"Etc/GMT-4"}]}"</param>
+        public string t_a_rb(string a) {
+            //var b, c = this;
             //this.g("REQUEST EXECUTED");
             t_a_I = true;
             //t_a_Z = window.setInterval(function ()
             //{
             //    return c.P(false);
             //}, 1E4);
-            b = document.createElement("script");
-            b.type = "text/javascript";
-            b.async = true;
-            b.src = encodeURI(x_Fa + "?d=" + p_a_ia(a) + "&c=" + q_a_bb(a)); //https://data.flurry.com/aah.do
-            a = document.getElementsByTagName("script");
-            return a[0].parentNode.insertBefore(b, a[0])
+            //b = document.createElement("script");
+            //b.type = "text/javascript";
+            //b.async = true;
+            var b =x_Fa + "?d=" + p_a_ia(a) + "&c=" + q_a_bb(a); //https://data.flurry.com/aah.do
+            //a = document.getElementsByTagName("script");
+            return b;
         }
         //a={a: 1 b: false c: Array[1] {0: Object {1383499767854: 1} } }
         public void t_a_Cb(ACb a) {
@@ -691,11 +856,17 @@ namespace ParseLib.Avito
             //this.I || g("ResponseError=>request considered timed out!");
             //typeof a != "object" && t_a_P(false);//, g("ResponseError=>input is not a valid object!"));
             a.a > 0 ? t_a_P(h) : t_a_P(n);
-            if(a.b != null) t_a_Ib(a.b);
+            t_a_localStorage = a.b;//t_a_Ib(a.b);
             if (a.d != null)
             {
                 t_a_F = a.d;
-                t_a_Ca();
+                //t_a_Ca();-------------------------------------------------------
+                var aa = t_a_G("firstPartyCookie", false);
+                if (aa != null)
+                    t_a_F = aa;
+                else
+                    if(t_a_F != null) 
+                        t_a_K("firstPartyCookie", t_a_F, false);//---------------
                 t_a_i = h;
             }
             if (t_a_i)
@@ -750,6 +921,23 @@ namespace ParseLib.Avito
             return encode;
         }
 
+        public void a_prototype_pb(d, b) {
+            var c;
+            var f = 0;
+            var l = this[a.c.k];
+            for (var j = 0, k = l.Length; j < k; j++) {
+                c = l[j];
+                if (c.bp == d) {
+                    c.br = Date.now() - (this[a.c.timestamp] + c.bq);
+                    b && A.Ua(b) && (c.bs = b);
+                    t_a_t(c);
+                    break
+                }
+                f++;
+            }
+            this[a.c.k].splice(f, 1);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -759,7 +947,11 @@ namespace ParseLib.Avito
         public void a_prototype_Wa(string d,EventO ev,bool c) {
             A.eventCounter++;
             //b = new Event(this[a.c.C], d, b, c, Date.now() - this[a.c.timestamp]);
-            ev = new EventO {bp = d.Trim(), ce = A.eventCounter, bq = DateTime.Now.Millisecond - A.ba, bs = b, timed = c, br = 0};
+            ev = new EventO
+            {
+                bp = d.Trim(), ce = A.eventCounter, 
+                bq = (long)((DateTime.Now-d1970).TotalMilliseconds) - A.ba, bs = b, timed = c, br = 0
+            };
             //d in this[a.c.T] ? (this[a.c.T][d]++, d in this[a.c.s] ? this[a.c.s][d]++ : this[a.c.s][d] = 1, this.t(b)) : this[a.c.ma] < 100 ? (this[a.c.T][d] = this[a.c.s][d] = 1, this[a.c.ma]++, this.t(b)) : g("LogError=>unique name limit reached!")
             if (A.totalEventNames.Count(x => x.Name == d)>0)
             {
@@ -839,7 +1031,7 @@ namespace ParseLib.Avito
         /// <returns></returns>
          public bool a_prototype_Ma() {
             //var d = this[a.c.r] > 0 ? Date.now() - this[a.c.r] : 0;
-             var d = A.pauseTimestamp > 0 ? DateTime.Now.Millisecond - A.pauseTimestamp : 0;
+             var d = A.pauseTimestamp > 0 ? (long)((DateTime.Now-d1970).TotalMilliseconds) - A.pauseTimestamp : 0;
              //d > 0 && (this[a.c.u] === -1 && (this[a.c.u] = 0), this[a.c.u] += d, this[a.c.r] = 0);return d < this[a.c.pa]
              if (d > 0)
              {
@@ -858,7 +1050,7 @@ namespace ParseLib.Avito
         public void a_prototype_A() {
             a_prototype_ob();
             //this.Oa(); -> this[a.c.duration] = Date.now() - this[a.c.timestamp]
-            A.bb = DateTime.Now.Millisecond - A.ba;
+            A.bb = (long)((DateTime.Now-d1970).TotalMilliseconds) - A.ba;
             //this[a.c.V] < 1E3 && (this[a.c.Aa] = n);
             if (A.numEventsLogged < 1E3)
                 A.bm = n;
@@ -874,7 +1066,7 @@ namespace ParseLib.Avito
             for (int b = 0, c = f.Count; b < c; b++)
             {
                 var d = f[b];
-                d.br = DateTime.Now.Millisecond - (A.ba + d.bq);
+                d.br = (long)((DateTime.Now-d1970).TotalMilliseconds) - (A.ba + d.bq);
                 a_prototype_t(d);
             }
             A.timedEvents = new List<EventO>();
