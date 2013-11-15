@@ -51,7 +51,7 @@ namespace ParseLib.Avito
         ///a.Da = i;
         public object t_a_Da = null;
         ///a.F = i;
-        public object t_a_F = null;
+        public string t_a_F;
         ///a.Ka = h;
         public bool t_a_Ka = true;
         ///a.Bb = h;
@@ -79,7 +79,7 @@ namespace ParseLib.Avito
         ///a.Y = 5E3;
         public int t_a_Y = 300000;
         ///a.ea = i;
-        public object t_a_ea = null;
+        public DateTime t_a_ea;
         ///a.I = n;
         public bool t_a_I = false;
         ///a.Z = i;
@@ -458,24 +458,24 @@ namespace ParseLib.Avito
         /// </summary>
         /// <param name="a"></param>
         public void t_a_ta(int a=0) {
-            var b = null;
+            //var b = null;
             t_a_Q();
             if (a>0) 
                 t_a_Y = Convert.ToInt32(a * 1E3);
-            t_a_fa = window.setInterval(function () {
-                b.ea = (long)((DateTime.Now-d1970).TotalMilliseconds);//1383498256608
-                t_a_K("lastPoll", (long)((DateTime.Now-d1970).TotalMilliseconds));
-                //return b.q()
-            }t_a_Y); 
+            //t_a_fa = window.setInterval(function () {
+            //    b.ea = (long)((DateTime.Now-d1970).TotalMilliseconds);//1383498256608
+            //    t_a_K("lastPoll", (long)((DateTime.Now-d1970).TotalMilliseconds));
+            //    //return b.q()
+            //}t_a_Y); 
             //t_a_ea && Date.now() - this.ea > this.Y && this.q(); Y=5000
-            if (t_a_ea != null &&)
+            if (t_a_ea != null && (DateTime.Now-t_a_ea).TotalMilliseconds>t_a_Y)
                 t_a_q();
 
-            return t_a_Y/1E3;
+            //return t_a_Y/1E3;
         }
         public void t_a_Q() {
-            if(t_a_fa!=null)
-                window.clearInterval(t_a_fa);
+            //if(t_a_fa!=null)
+            //    window.clearInterval(t_a_fa);
             t_a_fa = null;
         }
         
@@ -693,12 +693,8 @@ namespace ParseLib.Avito
             }
         }
         public void t_a_yb() {
-            this.g("pauseSession() called");
-            try {
-                return this.Q(), this.Na(), this.e ? (this.q(), this.e = i) : this.g("no session to pause!")
-            } catch (a) {
-                return this.h(a)
-            }
+            //this.g("pauseSession() called");
+            //return this.Q(), this.Na(), this.e ? (this.q(), this.e = i) : this.g("no session to pause!")
         }
         /// <summary>
         /// Создаёт и устанавливает куки _fs(json зашифрованный), _flp(время)
@@ -709,13 +705,18 @@ namespace ParseLib.Avito
             {
                 var a = (long)((DateTime.Now-d1970).TotalMilliseconds);
                 A.pauseTimestamp = a;
-                t_a_Tb = a;
+                //t_a_Tb = a;
                 t_a_K("session",a_prototype_Ya());
                 t_a_K("lastPoll", a);
             }
             
         }
-        //FlurryAgent.logEvent("environment", env)    b={browser: ""device: ""grade: "A"isBot: "0"mobile: ""os: ""}
+        /// <summary>
+        /// FlurryAgent.logEvent("environment", env) 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b">b={browser: ""device: ""grade: "A"isBot: "0"mobile: ""os: ""}</param>
+        /// <param name="c"></param>
         public void t_a_t(string a,EventO b=null,bool c=false) {
             //проверка объекта е что он существует->
             //return A.j(this.e); a_prototype_Wa(a, b, c), this.i = h
@@ -725,23 +726,27 @@ namespace ParseLib.Avito
                 t_a_i = true;
             }
         }
-        public void t_a_qb(a,object b=null) {
+        public void t_a_qb(object a,object b=null) {
             //return A.j(this.e), this.e.pb(a, b), this.i = h
             if (t_a_e != null)
             {
-                a_prototype_pb(a,b);
+                //a_prototype_pb(a,b);
                 t_a_i = h;
             }
         }
         public void t_a_k() {
-            var a, b, c, e, f;
-            var b = [];
+            //var a, f;
+            //var b = [];
             //A.j(this.e);f = this.e[z.c.k];for (c = 0, e = f.length; c < e; c++) a = f[c], b.push(a.bp)
-            if (t_a_e != null)
-            {
-                var f=
-            }
-            return b
+            //if (t_a_e != null)
+            //{
+            //    //var f=
+            //    for (int c = 0, e = f.length; c < e; c++)
+            //    {
+            //        a = f[c];
+            //        b.push(a.bp);
+            //    }
+            //}
         }
         public void t_a_Hb(bool a) {
             //return A.j(this.e), A.M(a), this.e.ja = a
@@ -750,27 +755,16 @@ namespace ParseLib.Avito
                 
             }
         }
-        public void t_a_U(a, b, c, e) {
-            b == i && (b = 0);
-            c == i && (c = "USD");
-            e == i && (e = {});
-            this.g("logPurchase(" + a + "," + b + "," + c + "," + e + ") called");
-            try {
-                return A.j(this.e), this.e.Xa(a, b, c, e), this.i = h
-            } catch (f) {
-                return this.h(f)
-            }
+        public void t_a_U(object a, int b=0,string c="USD",object e=null) {
+            //this.g("logPurchase(" + a + "," + b + "," + c + "," + e + ") called");
+            //return A.j(this.e), this.e.Xa(a, b, c, e), this.i = h
+            
         }
-        public void t_a_wb(a, b, c) {
-            c == i && (c = 0);
-            this.g("logError(" + a + "," + b + "," + c + ") called");
-            try {
-                return A.j(this.e),
-                this.e.Va(a, b, c), this.i = h
-            } catch (e) {
-                return this.h(e)
-            }
-        }
+        //public void t_a_wb(a, b, int c=0) {
+        //    //this.g("logError(" + a + "," + b + "," + c + ") called");
+        //    //return A.j(this.e),
+        //        //this.e.Va(a, b, c), this.i = h
+        //}
         /// <summary>
         /// Создаёт ссылку для запроса к серверу
         /// </summary>
@@ -791,7 +785,7 @@ namespace ParseLib.Avito
                     //this[a.c.s] = {};
                     A.bn=new List<TotalEvent>();
                     //this[a.c.X] = this[a.c.X].slice(b);
-                    A.bv = A.bv.GetRange(a.sessionIncluded.purchases,);
+                    A.bv = A.bv.GetRange(a.sessionIncluded.purchases, A.bv.Count - a.sessionIncluded.purchases);
                     //this[a.c.v] = {};
                     A.bu=new object();
                     //this[a.c.S] = this[a.c.S].slice(c)
@@ -872,7 +866,10 @@ namespace ParseLib.Avito
             if (t_a_i)
                 t_a_q();
         }
-        //очистка запроса
+        /// <summary>
+        /// очистка запроса
+        /// </summary>
+        /// <param name="a"></param>
         public void t_a_P(bool a) {
             //this.g("CLEAR REQUEST with " + a);
             if (t_a_I) {
@@ -921,22 +918,22 @@ namespace ParseLib.Avito
             return encode;
         }
 
-        public void a_prototype_pb(d, b) {
-            var c;
-            var f = 0;
-            var l = this[a.c.k];
-            for (var j = 0, k = l.Length; j < k; j++) {
-                c = l[j];
-                if (c.bp == d) {
-                    c.br = Date.now() - (this[a.c.timestamp] + c.bq);
-                    b && A.Ua(b) && (c.bs = b);
-                    t_a_t(c);
-                    break
-                }
-                f++;
-            }
-            this[a.c.k].splice(f, 1);
-        }
+            //public void a_prototype_pb(d, b) {
+            //    var c;
+            //    var f = 0;
+            //    var l = this[a.c.k];
+            //    for (var j = 0, k = l.Length; j < k; j++) {
+            //        c = l[j];
+            //        if (c.bp == d) {
+            //            c.br = Date.now() - (this[a.c.timestamp] + c.bq);
+            //            b && A.Ua(b) && (c.bs = b);
+            //            t_a_t(c);
+            //            break
+            //        }
+            //        f++;
+            //    }
+            //    this[a.c.k].splice(f, 1);
+            //}
 
         /// <summary>
         /// 

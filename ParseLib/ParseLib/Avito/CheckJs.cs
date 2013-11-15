@@ -104,7 +104,7 @@ namespace ParseLib.Avito
         public int eventCounter { get; set; }
         public int purchaseCounter { get; set; }
         public int errorCounter { get; set; }
-        public List<int> timedEvents { get; set; }
+        public List<EventO> timedEvents { get; set; }
     }
     /// <summary>
     /// 
@@ -235,7 +235,7 @@ namespace ParseLib.Avito
 
         public void a_prototype_Za(string a,string d,string b,string c,string e,string j,A k,List<A> l,object m) {
             request = new X(10, 9, a, d, b, c, e, j, k, l, m);
-            var res = [];
+            var res = new List<X>();
             for (; ; ) {
                 //this.level === 4 && g("RequestError=>request length is set too short!");
                 a = JSON.stringify(request);
@@ -329,7 +329,12 @@ namespace ParseLib.Avito
             }
             return f;
         }
-        public string Ab="{timedEvents: 'timedEvents',eventLogging: 'eventLogging',sessionContinue: 'sessionContinue',pauseTimestamp: 'pauseTimestamp',age: 'age',numEventNames: 'numEventNames',numPurchaseNames: 'numPurchaseNames',requestsMade: 'requestsMade',totalEventNames: 'totalEventNames",totalPurchaseNames: "totalPurchaseNames',numEventsLogged: 'numEventsLogged',numPurchasesLogged: 'numPurchasesLogged',numErrorsLogged: 'numErrorsLogged',eventCounter: 'eventCounter',purchaseCounter: 'purchaseCounter',errorCounter: 'errorCounter'}";
+        public string Ab="{timedEvents: 'timedEvents',eventLogging: 'eventLogging',sessionContinue: 'sessionContinue'," +
+                         "pauseTimestamp: 'pauseTimestamp',age: 'age',numEventNames: 'numEventNames'," +
+                         "numPurchaseNames: 'numPurchaseNames',requestsMade: 'requestsMade',totalEventNames: 'totalEventNames'," +
+                         "totalPurchaseNames: 'totalPurchaseNames',numEventsLogged: 'numEventsLogged'," +
+                         "numPurchasesLogged: 'numPurchasesLogged',numErrorsLogged: 'numErrorsLogged',eventCounter: 'eventCounter'," +
+                         "purchaseCounter: 'purchaseCounter',errorCounter: 'errorCounter'}";
         
     }
 
@@ -358,7 +363,7 @@ namespace ParseLib.Avito
                 //s.Oa();   this[a.c.duration] = Date.now() - this[a.c.timestamp]
                 s.bb = (long)((DateTime.Now-d1970).TotalMilliseconds) - s.ba;
                 var ee = a.za(s);
-                bX.AddRange(ee);
+                bX.AddRange(ee.Values.ToString());
             };
             for (b = 0, c = C.Count; b < c; b++)
             {
@@ -366,7 +371,7 @@ namespace ParseLib.Avito
                 bX.AddRange(ee);
             }
         }
-        public Dictionary<string,string> zb() {timed: "timed"};
+        public Dictionary<string,string> zb() {timed: "timed"}
         public string Fa = "https://data.flurry.com/aah.do";
         //public string Sb() {
         //    return this.Fa
