@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TCPSocket;
 
 namespace ParseLib.Avito
@@ -63,7 +64,7 @@ namespace ParseLib.Avito
         //    return h
         //};
         //return a
-    
+
     }
     /// <summary>
     /// {a: 1 b: false c: Array[1] {0: Object {1383499767854: 1} } }
@@ -81,7 +82,7 @@ namespace ParseLib.Avito
         public string bp { get; set; }
         public int ce { get; set; }
         public long bq { get; set; }
-        public object bs { get; set; }
+        public EventO bs { get; set; }
         public bool timed { get; set; }
         public long br { get; set; }
     }
@@ -99,7 +100,7 @@ namespace ParseLib.Avito
     //{"ba":1383569616354,"bc":-1,"eventCounter":0,"purchaseCounter":0,"errorCounter":0,"timedEvents":[]}
     public class Fb
     {
-        public int ba { get; set; }
+        public long ba { get; set; }
         public int bc { get; set; }
         public int eventCounter { get; set; }
         public int purchaseCounter { get; set; }
@@ -142,7 +143,7 @@ namespace ParseLib.Avito
         //purchaseCounter: 0
         //requestsMade: 1
         //sessionContinue: 300000
-        
+
         ///age: 0
         public int age { get; set; }
         //ba: 1382867611139
@@ -233,64 +234,135 @@ namespace ParseLib.Avito
         public X request { get; set; }
         public AFb sessionIncluded { get; set; }
 
-        public void a_prototype_Za(string a,string d,string b,string c,string e,string j,A k,List<A> l,object m) {
+        public void a_prototype_Za(string a, string d, string b, string c, string e, string j, A k, List<A> l, object m)
+        {
             request = new X(10, 9, a, d, b, c, e, j, k, l, m);
-            var res = new List<X>();
-            for (; ; ) {
-                //this.level === 4 && g("RequestError=>request length is set too short!");
-                a = JSON.stringify(request);
-                if (a.Length * 4 / 3 <= 3E3) {
-                    sessionsIncluded = request.bX.Count - 1;
-                    sessionIncluded.events = request.bX[0].bo.length;
-                    sessionIncluded.purchases = request.bX[0].bv.length;
-                    sessionIncluded.errors = request.bX[0].by.length;
-                    break;
-                }
-                res.Add(request = xb(request));
-            }
-        }
-
-        public X xb(X a) {
-            switch (level) {
-                case 0:
-                    a.bX.Length == 1 ? level = 1 : a.bX = this.R(a.bX);
-                    break;
-                case 1:
-                    a.bX[0].by.length == 0 ? level = 2 : a.bX[0].by = R(a.bX[0].by);
-                    break;
-                case 2:
-                    a.bX[0].bv.length == 0 ? level = 3 : a.bX[0].bv = R(a.bX[0].bv);
-                    break;
-                case 3:
-                    a.bX[0].bo.length == 0 ? level = 4 : a.bX[0].bo = R(a.bX[0].bo)
-            }
-            return a;
-        }
-
-        /// <summary>
-        /// Возвращает первую половину элементов из массива
-        /// </summary>
-        /// <param name="a">Массив</param>
-        /// <returns></returns>
-        public object R(Dictionary<string,object> a) {
-            if(a.Count >= 1)
+            //var res = new List<X>();
+            //for (; ; ) {
+            //this.level === 4 && g("RequestError=>request length is set too short!");
+            a = JsonConvert.SerializeObject(request.BX);
+            if (a.Length * 4 / 3 <= 3E3)
             {
-                var d = a.Count/2;
-                var temp = new Dictionary<string, object>();
-                int i = 0;
-                foreach(var tr in a)
-                {
-                    temp.Add(tr.Key,tr.Value);
-                    i++;
-                    if(i==d)
-                        break;
-                }
-                a = temp;
+                sessionsIncluded = request.BX.Count - 1;
+                sessionIncluded = new AFb { events = 2, purchases = 0, errors = 0 };
+                //break;
             }
-            return a;
+            //res.Add(request = xb(request));
+            //}
         }
+
+        //public X xb(X a) {
+        //    switch (level) {
+        //        case 0:
+        //            a.bX.Count == 1 ? level = 1 : null//a.bX = R(a.bX);
+        //            break;
+        //        case 1:
+        //            level = 2;//a.bX[0].by.length == 0 ? level = 2 : a.bX[0].by = R(a.bX[0].by);
+        //            break;
+        //        case 2:
+        //            level = 3;//a.bX[0].bv.length == 0 ? level = 3 : a.bX[0].bv = R(a.bX[0].bv);
+        //            break;
+        //        case 3:
+        //            level = 4; //a.bX[0].bo.length == 0 ? level = 4 : a.bX[0].bo = R(a.bX[0].bo)
+        //    }
+        //    return a;
+        //}
+
+        ///// <summary>
+        ///// Возвращает первую половину элементов из массива
+        ///// </summary>
+        ///// <param name="a">Массив</param>
+        ///// <returns></returns>
+        //public Dictionary<string, object> R(Dictionary<string, object> a)
+        //{
+        //    if(a.Count >= 1)
+        //    {
+        //        var d = a.Count/2;
+        //        var temp = new Dictionary<string, object>();
+        //        int i = 0;
+        //        foreach(var tr in a)
+        //        {
+        //            temp.Add(tr.Key,tr.Value);
+        //            i++;
+        //            if(i==d)
+        //                break;
+        //        }
+        //        a = temp;
+        //    }
+        //    return a;
+        //}
     }
 
+    public class X
+    {
+        private int f = 1;
+        private int d = 1;
+        private Dictionary<string, object> bX;
+        private DateTime d1970 = new DateTime(1970, 1, 1);
+        public Dictionary<string, object> BX{get { return bX; }}
+        /// <summary>
+        /// Выбирает нужные поля
+        /// </summary>
+        /// <returns>a: Object aa: 1 ab: 10 ac: 9 ad: "BYCR5JHJJDRQZK2VPDDQ" ae: "mobile" af: 1384194567352 ag: 1382371709662 ah: 1384194020903 ak: 1 cg: "SG0978FE8DF36DE98AC942EC221DCD35404566F861"
+        ///b: Array[1]  ba: 1384194020903 bb: 573481 bc: 319758 bd: "mobile" be: "" bj: "ru" bk: -1 bl: 0 bm: false bn: Object 
+        ///bo: Array[2] 0: f bp: "environment" bq: 496651 br: 0 bs: Object browser: "" device: "" grade: "A" isBot: "0" mobile: "" os: "" ce: 3 
+        ///             1: f bp: "PageView" bq: 496651 br: 0 bs: Object ce: 4
+        /// bt: false bu: Object bv: Array[0] by: Array[0] cd: 0 ch: "Etc/GMT-4" </returns>
+        public X(int b, int c, string e, string j, string k, string l, string m, string r, A s, List<A> C, object u)
+        {
+            var a = new Xa { af = (long)((DateTime.Now - d1970).TotalMilliseconds), aa = f, ab = b, ac = c, ae = e, ad = j, ag = k, ah = s.ba };
+            //a.g("about to check if firstPartyCookieUID " + u + " should be assigned to global map in the report request");
+            if (u != null)
+                a.cg = u;
+            if (s.requestsMade == 0)
+            {
+                a.ai = l;
+                a.aj = r;
+                //s.Db();
+                s.requestsMade++;
+            }
+            a.ak = d;
+            var tempA = JsonConvert.SerializeObject(a);
+            object aa = JsonConvert.DeserializeObject<Dictionary<string, object>>(tempA);
+            bX = new Dictionary<string, object> {{"a", aa}};
+            //if(s!=null)
+            //{
+            //s.Oa();   this[a.c.duration] = Date.now() - this[a.c.timestamp]
+            s.bb = (long)((DateTime.Now - d1970).TotalMilliseconds) - s.ba;
+            var ee = a.za(s);
+            bX.Add("b",new object[]{ee});
+            
+            //}
+            //if (C.Count > 0)
+            //{
+            //    for (b = 0, c = C.Count; b < c; b++)
+            //    {
+            //        var ee = a.za(C[b]);
+            //        foreach (var o in ee)
+            //        {
+            //            bX.Add(o.Key,o.Value);
+            //        }
+            //    }
+            //}
+        }
+        //public Dictionary<string,string> zb() {timed: "timed"}
+        public string Fa = "https://data.flurry.com/aah.do";
+        //public string Sb() {
+        //    return this.Fa
+        //}
+        //public string hb(string a) {
+        //    var c, d, f;
+        //    d = {};
+        //    for (c in a)
+        //        f = a[c], this.zb.hasOwnProperty(c) || (d[c] = f);
+        //    return d
+        //}
+
+        //public string a_prototype_Kb()
+        //{
+        //    this.a.af = (long) ((DateTime.Now - d1970).TotalMilliseconds);
+        //}
+    }
     public class Xa
     {
         public long af { get; set; }
@@ -300,92 +372,52 @@ namespace ParseLib.Avito
         public string ae { get; set; }
         public string ad { get; set; }
         public string ag { get; set; }
-        public int ah { get; set; }
+        public long ah { get; set; }
         public object cg { get; set; }
         public string ai { get; set; }
         public string aj { get; set; }
         public int ak { get; set; }
-        public Dictionary<string,object> za(A a) {
-            var f = new Dictionary<string,object>();
-            var tempA= Helpers.ConvertToDictionary<string,object[]>(a);
+
+        public Dictionary<string, object> za(A a)
+        {
+            var f = new Dictionary<string, object>();
+            var json = JsonConvert.SerializeObject(a);
+            var tempA = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
             foreach (var d in tempA)
             {
                 var k = d;
-                if (d.Key == "bf"&&d.Value[0] != null)
-                    f.Add(d.Key,k);
-                else if (d.Key == "bo")
+                
+                if (d.Key == "bf")
                 {
-                    //f[d] = [];
-                    var temp = new List<object>();
-                    for (int l = 0, m = k.Value.Count(); l < m; l++)
-                    {
-                        var c = k.Value[l];
-                        temp.Add(c);
-                    }
-                    f[d.Key]=temp;
-                }
-                else
-                    if(!Ab.Contains(d.Key+":")) f.Add(d.Key,k.Value);
+                    var l1 = d.Value as Dictionary<string, int>;
+                    if (l1!=null && l1.Count > 0)
+                        f.Add(d.Key, k);
+                }else if (!Ab.Contains(d.Key + ":")) f.Add(d.Key, k.Value);
+                //else if (d.Key == "bo")
+                //{
+                //    //f[d] = [];
+                //    //var temp = new List<EventO>();
+                //    //var l1 = d.Value as List<EventO>;
+                //    //if (l1 != null && l1.Count > 0)
+                //    //{
+                //    //    for (int l = 0, m = l1.Count(); l < m; l++)
+                //    //    {
+                //    //        var c = l1[l];
+                //    //        temp.Add(c);
+                //    //    }
+                //    //}
+                //    f[d.Key] = d.Value;
+                //}
+                //else if (!Ab.Contains(d.Key + ":")) f.Add(d.Key, k.Value);
             }
             return f;
         }
-        public string Ab="{timedEvents: 'timedEvents',eventLogging: 'eventLogging',sessionContinue: 'sessionContinue'," +
+        private string Ab = "{timedEvents: 'timedEvents',eventLogging: 'eventLogging',sessionContinue: 'sessionContinue'," +
                          "pauseTimestamp: 'pauseTimestamp',age: 'age',numEventNames: 'numEventNames'," +
                          "numPurchaseNames: 'numPurchaseNames',requestsMade: 'requestsMade',totalEventNames: 'totalEventNames'," +
                          "totalPurchaseNames: 'totalPurchaseNames',numEventsLogged: 'numEventsLogged'," +
                          "numPurchasesLogged: 'numPurchasesLogged',numErrorsLogged: 'numErrorsLogged',eventCounter: 'eventCounter'," +
                          "purchaseCounter: 'purchaseCounter',errorCounter: 'errorCounter'}";
-        
-    }
 
-    public class X
-    {
-        public int f = 1;
-        public int d = 1;
-        public List<string> bX ;
-        public X(int b, int c, string e, string j, string k, string l, string m, string r, A s, List<A> C, object u)
-        {
-            var a = new Xa {af = (long)((DateTime.Now-d1970).TotalMilliseconds), aa = f, ab = b, ac = c, ae = e, ad = j, ag = k, ah = s.ba};
-            //a.g("about to check if firstPartyCookieUID " + u + " should be assigned to global map in the report request");
-            if (u != null)
-                a.cg = u;
-            if (s.requestsMade == 0)
-            { 
-                a.ai = l;
-                a.aj = r;
-                //s.Db();
-                s.requestsMade++;
-            }
-            a.ak = d;
-            bX = new List<string>();
-            if(s!=null)
-            {
-                //s.Oa();   this[a.c.duration] = Date.now() - this[a.c.timestamp]
-                s.bb = (long)((DateTime.Now-d1970).TotalMilliseconds) - s.ba;
-                var ee = a.za(s);
-                bX.AddRange(ee.Values.ToString());
-            };
-            for (b = 0, c = C.Count; b < c; b++)
-            {
-                var ee = a.za(C[b]);
-                bX.AddRange(ee);
-            }
-        }
-        public Dictionary<string,string> zb() {timed: "timed"}
-        public string Fa = "https://data.flurry.com/aah.do";
-        //public string Sb() {
-        //    return this.Fa
-        //}
-        public string hb(string a) {
-            var c, d, f;
-            d = {};
-            for (c in a)
-                f = a[c], this.zb.hasOwnProperty(c) || (d[c] = f);
-            return d
-        }
-        
-        public string a_prototype_Kb() {
-            this.a.af = (long)((DateTime.Now-d1970).TotalMilliseconds)
-        }
     }
 }

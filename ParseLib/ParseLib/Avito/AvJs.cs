@@ -31,11 +31,13 @@ namespace ParseLib.Avito
             //t_a_da("mobile");
             t_a_appVersion = "mobile";
             t_a_i = true;
+            d1970 = new DateTime(1970, 1, 1);
+            t_a_ka = ((long)((DateTime.Now - d1970).TotalMilliseconds)).ToString();
             t_a_Ra(t_a_O);
             return new List<string>(){ResultLink,cookie};
         } 
         public string ResultLink { get; set; }
-        public DateTime d1970=new DateTime(1970,1,1);
+        public DateTime d1970;
         public string cookie { get; set; }
         public A A;
         ///a.i = h;
@@ -47,10 +49,10 @@ namespace ParseLib.Avito
         ///a.Ha = 0;
         public int t_a_Ha = 0;
         ///a.ka = Date.now();
-        public string t_a_ka = (long)((DateTime.Now-d1970).TotalMilliseconds);
+        public string t_a_ka;
         ///a.Da = i;
         public object t_a_Da = null;
-        ///a.F = i;
+        ///a.F = fid="SG0978FE8DF36DE98AC942EC221DCD35404566F861";
         public string t_a_F;
         ///a.Ka = h;
         public bool t_a_Ka = true;
@@ -108,18 +110,24 @@ namespace ParseLib.Avito
             int e,k,j;
             var a = p_a_Ob(json);
             l = "";
-            for (var r = a.Length; m < r; c = m += 3)
+            for (var r = a.Length; m < r; m += 3)
             {
+                c = m;
                 d = a.ToCharArray()[c];
                 b = a.ToCharArray()[c + 1];
-                c = a.ToCharArray()[c + 2];
+                c = a.Length-2 != m ? a.ToCharArray()[c + 2] : 0; //4
+                
                 e = d >> 2;
                 d = (d & 3) << 4 | b >> 4;
                 j = (b & 15) << 2 | c >> 6;
                 k = c & 63;
-                int res = 0;
+                if (b == 0)
+                    k = j = 64;
+                if (c == 0)
+                    k = 64;
                 var xc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".Select(x => x.ToString()).ToArray();
                 l += xc[e] + xc[d] + xc[j] + xc[k];
+                //"QllDUjVKSEpKRFJRWksyVlBERFE="
             }
             return l;
         }
@@ -412,8 +420,8 @@ namespace ParseLib.Avito
                 c = e[m];
                 k = c.IndexOf("=");
                 f = c.Substring(0, k);
-                if (f == l)
-                    return c.Substring(k+1);
+                if (f.Contains(l))
+                    return c.Substring(k + 1);
             }
             return null;
         }
@@ -434,7 +442,21 @@ namespace ParseLib.Avito
             {
                 if (s.Contains(value))
                 {
-                    cookie = cookie.Replace(s, "");
+                    //cookie = cookie.Replace(s+";", "");
+                    var end = 0;
+                    
+                    if (cookie.Length == cookie.IndexOf(s) + s.Length)
+                    {
+                        end = cookie.Length;
+                        var addEnd = cookie.IndexOf(";", cookie.IndexOf(s) - 7);
+                        cookie = cookie.Remove(addEnd, end - addEnd);
+                    }
+                    else
+                    {
+                        end = cookie.IndexOf(";", cookie.IndexOf(s) + 5) + 1;
+                        cookie = cookie.Remove(cookie.IndexOf(s), end - cookie.IndexOf(s));
+                    }
+                    
                     break;
                 }
             }
@@ -449,9 +471,9 @@ namespace ParseLib.Avito
 
         public void t_a_K(string a,string b, bool c=true) {
             //e.setTime(Date.now() + 31536E7); //+51721959(10 лет)
-            var e = new DateTime();
+            var e = DateTime.Now;
             e=e.AddYears(10);
-            cookie += t_a_ga(a, c) + "=" + b + "; expires=" + e.ToString("R") + "; path=/";
+            cookie += "; " + t_a_ga(a, c) + "=" + b;//t_a_ga(a, c) + "=" + b + "; expires=" + e.ToString("R") + "; path=/";
         }
         /// <summary>
         /// Вызывается из t_a_kb во время движения по странице
@@ -506,21 +528,21 @@ namespace ParseLib.Avito
                 bj = "ru",
                 timedEvents = xx!=null?xx.timedEvents:null,
                 eventCounter = xx!=null?xx.eventCounter:0,
-                bo = null,
+                bo = new List<EventO>(),
                 numEventsLogged = 0,
                 bm = false,
                 totalEventNames = null,
-                bn=null,
+                bn=new List<TotalEvent>(),
                 numEventNames = 0,
                 purchaseCounter = xx!=null?xx.purchaseCounter:0,
-                bv = null,
+                bv = new List<object>(),
                 numPurchasesLogged = 0,
                 bt = false,
                 totalPurchaseNames = null,
-                bu = null,
+                bu = new object(),
                 numPurchaseNames = 0,
                 errorCounter = xx!=null?xx.errorCounter:0,
-                by = null,
+                by = new List<object>(),
                 numErrorsLogged = 0,
                 cd=0,
                 ba = xx!=null?xx.ba:(long)((DateTime.Now-d1970).TotalMilliseconds),
@@ -532,6 +554,7 @@ namespace ParseLib.Avito
                 requestsMade = 0,
                 ch="Etc/GMT-4"
             };
+            A = res;
             //this.J && a.L(this.J);
             if (t_a_J > 0)
                 res.sessionContinue = t_a_J;
@@ -555,11 +578,15 @@ namespace ParseLib.Avito
                 //t_a_jb();**********************************************
                 var aa = t_a_G("install");
                 var num = Regex.Replace(aa, @"", "");
-                if(num.Length==a.Length)
+                if (num.Length == a.Length)
                     t_a_ka = aa;
                 else
-                    t_a_K("install", t_a_ka);//**************************
-
+                {
+                    //удаляем старую запись 
+                    t_a_ha("install");
+                    //Создаём
+                    t_a_K("install", t_a_ka); //**************************
+                }
                 //t_a_Ca();//this.Ca();//this.F =_fid.value+++++++++++++++++++++++++++++
                 var aaa = t_a_G("firstPartyCookie", false);
                 if (aaa != null)
@@ -707,7 +734,7 @@ namespace ParseLib.Avito
                 A.pauseTimestamp = a;
                 //t_a_Tb = a;
                 t_a_K("session",a_prototype_Ya());
-                t_a_K("lastPoll", a);
+                t_a_K("lastPoll", a.ToString());
             }
             
         }
@@ -781,19 +808,25 @@ namespace ParseLib.Avito
                     //t_a_fb(a);-------------------------------
                     //a_prototype_gb(a.sessionIncluded.events, a.sessionIncluded.purchases, a.sessionIncluded.errors);*************
                     //this[a.c.D] = this[a.c.D].slice(d);
-                    A.bo = A.bo.GetRange(a.sessionIncluded.events,A.bo.Count-a.sessionIncluded.events);
+                    var temprange = A.bo.Count == 0 ? a.sessionIncluded.events : A.bo.Count - a.sessionIncluded.events;
+                    A.bo = A.bo.GetRange(a.sessionIncluded.events,temprange);
                     //this[a.c.s] = {};
                     A.bn=new List<TotalEvent>();
                     //this[a.c.X] = this[a.c.X].slice(b);
-                    A.bv = A.bv.GetRange(a.sessionIncluded.purchases, A.bv.Count - a.sessionIncluded.purchases);
+                    temprange = A.bv.Count == 0 ? a.sessionIncluded.purchases : A.bv.Count - a.sessionIncluded.purchases;
+                    A.bv = A.bv.GetRange(a.sessionIncluded.purchases, temprange);
                     //this[a.c.v] = {};
                     A.bu=new object();
                     //this[a.c.S] = this[a.c.S].slice(c)
-                    A.by = A.by.GetRange(a.sessionIncluded.errors,A.by.Count-a.sessionIncluded.errors);//************************
+                    temprange = A.by.Count == 0 ? a.sessionIncluded.errors : A.by.Count - a.sessionIncluded.errors;
+                    A.by = A.by.GetRange(a.sessionIncluded.errors,temprange);//************************
 
                     //this.$ = this.$.slice(a.sessionsIncluded);
-                    if(a.sessionsIncluded>0)
-                        t_a_S = t_a_S.GetRange(a.sessionsIncluded,t_a_S.Count-a.sessionsIncluded);
+                    if (a.sessionsIncluded > 0)
+                    {
+                        temprange = t_a_S.Count == 0 ? a.sessionsIncluded : t_a_S.Count - a.sessionsIncluded;
+                        t_a_S = t_a_S.GetRange(a.sessionsIncluded, t_a_S.Count - a.sessionsIncluded);
+                    }
                     if (a.level == 0) t_a_i = false;//----------
                     
                 }
@@ -849,20 +882,20 @@ namespace ParseLib.Avito
             //this.g("RESPONSE RECEIVED");
             //this.I || g("ResponseError=>request considered timed out!");
             //typeof a != "object" && t_a_P(false);//, g("ResponseError=>input is not a valid object!"));
-            a.a > 0 ? t_a_P(h) : t_a_P(n);
+            t_a_P(a.a > 0 ? h : n);
             t_a_localStorage = a.b;//t_a_Ib(a.b);
-            if (a.d != null)
-            {
-                t_a_F = a.d;
-                //t_a_Ca();-------------------------------------------------------
-                var aa = t_a_G("firstPartyCookie", false);
-                if (aa != null)
-                    t_a_F = aa;
-                else
-                    if(t_a_F != null) 
-                        t_a_K("firstPartyCookie", t_a_F, false);//---------------
-                t_a_i = h;
-            }
+            //if (a.d != null)
+            //{
+            //    t_a_F = a.d;
+            //    //t_a_Ca();-------------------------------------------------------
+            //    var aa = t_a_G("firstPartyCookie", false);
+            //    if (aa != null)
+            //        t_a_F = aa;
+            //    else
+            //        if(t_a_F != null) 
+            //            t_a_K("firstPartyCookie", t_a_F, false);//---------------
+            //    t_a_i = h;
+            //}
             if (t_a_i)
                 t_a_q();
         }
@@ -872,9 +905,10 @@ namespace ParseLib.Avito
         /// <param name="a"></param>
         public void t_a_P(bool a) {
             //this.g("CLEAR REQUEST with " + a);
-            if (t_a_I) {
-                if(t_a_Z!=null) window.clearInterval(t_a_Z);
-                if (a) t_a_w = i;
+            if (t_a_I)
+            {
+                //if (t_a_Z != null) window.clearInterval(t_a_Z);
+                if (a) t_a_w = null;
                 t_a_I = n;
                 t_a_Z = null;
             }
@@ -892,7 +926,7 @@ namespace ParseLib.Avito
             //this[a.c.s] = {};
             A.bn=new List<TotalEvent>();
             //this[a.c.X] = this[a.c.X].slice(b);
-            A.bv = A.bv.GetRange(b);
+            A.bv = A.bv.GetRange(b,A.bv.Count-b);
             //this[a.c.v] = {};
             A.bu=new object();
             //this[a.c.S] = this[a.c.S].slice(c)
@@ -947,7 +981,7 @@ namespace ParseLib.Avito
             ev = new EventO
             {
                 bp = d.Trim(), ce = A.eventCounter, 
-                bq = (long)((DateTime.Now-d1970).TotalMilliseconds) - A.ba, bs = b, timed = c, br = 0
+                bq = (long)((DateTime.Now-d1970).TotalMilliseconds) - A.ba, bs = ev, timed = c, br = 0
             };
             //d in this[a.c.T] ? (this[a.c.T][d]++, d in this[a.c.s] ? this[a.c.s][d]++ : this[a.c.s][d] = 1, this.t(b)) : this[a.c.ma] < 100 ? (this[a.c.T][d] = this[a.c.s][d] = 1, this[a.c.ma]++, this.t(b)) : g("LogError=>unique name limit reached!")
             if (A.totalEventNames.Count(x => x.Name == d)>0)
@@ -1060,11 +1094,14 @@ namespace ParseLib.Avito
         /// </summary>
         public void a_prototype_ob() {
             var f = A.timedEvents;
-            for (int b = 0, c = f.Count; b < c; b++)
+            if (f != null)
             {
-                var d = f[b];
-                d.br = (long)((DateTime.Now-d1970).TotalMilliseconds) - (A.ba + d.bq);
-                a_prototype_t(d);
+                for (int b = 0, c = f.Count; b < c; b++)
+                {
+                    var d = f[b];
+                    d.br = (long) ((DateTime.Now - d1970).TotalMilliseconds) - (A.ba + d.bq);
+                    a_prototype_t(d);
+                }
             }
             A.timedEvents = new List<EventO>();
         }
