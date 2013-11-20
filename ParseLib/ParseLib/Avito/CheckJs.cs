@@ -167,9 +167,9 @@ namespace ParseLib.Avito
         ///bm: false
         public bool bm { get; set; }
         ///bn: Object
-        public List<TotalEvent> bn { get; set; }
+        public TotalEvent bn { get; set; }
         ///bo: Array[0]
-        public List<EventO> bo { get; set; }
+        public List<EventEnv> bo { get; set; }
         ///bt: false
         public bool bt { get; set; }
         ///bu: Object
@@ -214,10 +214,30 @@ namespace ParseLib.Avito
         public object totalPurchaseNames { get; set; }
     }
 
+    public class Environment
+    {
+        public string browser { get; set; }
+        public string device{ get; set; }
+        public string grade{ get; set; }
+        public string isBot{ get; set; }
+        public string mobile { get; set; }
+        public string os{ get; set; }
+    }
+
+    public class EventEnv
+    {
+        public string bp { get; set; }
+        public int ce { get; set; }
+        public long bq { get; set; }
+        public object bs { get; set; }
+        //public bool timed { get; set; }
+        public long br { get; set; }
+    }
+
     public class TotalEvent
     {
-        public string Name { get; set; }
-        public int Value { get; set; }
+        public int environment { get; set; }
+        public int PageView { get; set; }
     }
 
     public class Y
@@ -241,6 +261,7 @@ namespace ParseLib.Avito
             //for (; ; ) {
             //this.level === 4 && g("RequestError=>request length is set too short!");
             a = JsonConvert.SerializeObject(request.BX);
+            var trtr = JsonConvert.DeserializeObject<Dictionary<string,object>>(a);
             if (a.Length * 4 / 3 <= 3E3)
             {
                 sessionsIncluded = request.BX.Count - 1;
@@ -310,17 +331,17 @@ namespace ParseLib.Avito
         /// bt: false bu: Object bv: Array[0] by: Array[0] cd: 0 ch: "Etc/GMT-4" </returns>
         public X(int b, int c, string e, string j, string k, string l, string m, string r, A s, List<A> C, object u)
         {
-            var a = new Xa { af = (long)((DateTime.Now - d1970).TotalMilliseconds), aa = f, ab = b, ac = c, ae = e, ad = j, ag = k, ah = s.ba };
+            var a = new Xa { af = (long)((DateTime.Now - d1970).TotalMilliseconds), aa = f, ab = b, ac = c, ae = e, ad = j, ag = Convert.ToInt64(k), ah = s.ba };
             //a.g("about to check if firstPartyCookieUID " + u + " should be assigned to global map in the report request");
             if (u != null)
                 a.cg = u;
-            if (s.requestsMade == 0)
-            {
-                a.ai = l;
-                a.aj = r;
-                //s.Db();
-                s.requestsMade++;
-            }
+            //if (s.requestsMade == 0)
+            //{
+            //    a.ai = l;
+            //    a.aj = r;
+            //    //s.Db();
+            //    s.requestsMade++;
+            //}
             a.ak = d;
             var tempA = JsonConvert.SerializeObject(a);
             object aa = JsonConvert.DeserializeObject<Dictionary<string, object>>(tempA);
@@ -371,11 +392,11 @@ namespace ParseLib.Avito
         public int ac { get; set; }
         public string ae { get; set; }
         public string ad { get; set; }
-        public string ag { get; set; }
+        public long ag { get; set; }
         public long ah { get; set; }
         public object cg { get; set; }
-        public string ai { get; set; }
-        public string aj { get; set; }
+        //public string ai { get; set; }
+        //public string aj { get; set; }
         public int ak { get; set; }
 
         public Dictionary<string, object> za(A a)
@@ -383,41 +404,58 @@ namespace ParseLib.Avito
             var f = new Dictionary<string, object>();
             var json = JsonConvert.SerializeObject(a);
             var tempA = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-            foreach (var d in tempA)
-            {
-                var k = d;
+            f.Add("bd", tempA["bd"]);
+            f.Add("be", tempA["be"]);
+            f.Add("bk", tempA["bk"]);
+            f.Add("bl", tempA["bl"]);
+            f.Add("bj", tempA["bj"]);
+            f.Add("bo", tempA["bo"]);
+            f.Add("bm", tempA["bm"]);
+            f.Add("bn", tempA["bn"]);
+            f.Add("bv", tempA["bv"]);
+            f.Add("bt", tempA["bt"]);
+            f.Add("bu", tempA["bu"]);
+            f.Add("by", tempA["by"]);
+            f.Add("cd", tempA["cd"]);
+            f.Add("ba", tempA["ba"]);
+            f.Add("bb", tempA["bb"]);
+            f.Add("bc", tempA["bc"]);
+            f.Add("ch", tempA["ch"]);
+            //foreach (var d in tempA)
+            //{
+            //    var k = d;
                 
-                if (d.Key == "bf")
-                {
-                    var l1 = d.Value as Dictionary<string, int>;
-                    if (l1!=null && l1.Count > 0)
-                        f.Add(d.Key, k);
-                }else if (!Ab.Contains(d.Key + ":")) f.Add(d.Key, k.Value);
-                //else if (d.Key == "bo")
-                //{
-                //    //f[d] = [];
-                //    //var temp = new List<EventO>();
-                //    //var l1 = d.Value as List<EventO>;
-                //    //if (l1 != null && l1.Count > 0)
-                //    //{
-                //    //    for (int l = 0, m = l1.Count(); l < m; l++)
-                //    //    {
-                //    //        var c = l1[l];
-                //    //        temp.Add(c);
-                //    //    }
-                //    //}
-                //    f[d.Key] = d.Value;
-                //}
-                //else if (!Ab.Contains(d.Key + ":")) f.Add(d.Key, k.Value);
-            }
+            //    if (d.Key == "bf")
+            //    {
+            //        var l1 = d.Value as Dictionary<string, int>;
+            //        if (l1!=null && l1.Count > 0)
+            //            f.Add(d.Key, k);
+            //    }else if (!Ab.Contains(d.Key + ":")) f.Add(d.Key, k.Value);
+            //    //else if (d.Key == "bo")
+            //    //{
+            //    //    //f[d] = [];
+            //    //    //var temp = new List<EventO>();
+            //    //    //var l1 = d.Value as List<EventO>;
+            //    //    //if (l1 != null && l1.Count > 0)
+            //    //    //{
+            //    //    //    for (int l = 0, m = l1.Count(); l < m; l++)
+            //    //    //    {
+            //    //    //        var c = l1[l];
+            //    //    //        temp.Add(c);
+            //    //    //    }
+            //    //    //}
+            //    //    f[d.Key] = d.Value;
+            //    //}
+            //    //else if (!Ab.Contains(d.Key + ":")) f.Add(d.Key, k.Value);
+            //}
             return f;
         }
-        private string Ab = "{timedEvents: 'timedEvents',eventLogging: 'eventLogging',sessionContinue: 'sessionContinue'," +
-                         "pauseTimestamp: 'pauseTimestamp',age: 'age',numEventNames: 'numEventNames'," +
-                         "numPurchaseNames: 'numPurchaseNames',requestsMade: 'requestsMade',totalEventNames: 'totalEventNames'," +
-                         "totalPurchaseNames: 'totalPurchaseNames',numEventsLogged: 'numEventsLogged'," +
-                         "numPurchasesLogged: 'numPurchasesLogged',numErrorsLogged: 'numErrorsLogged',eventCounter: 'eventCounter'," +
-                         "purchaseCounter: 'purchaseCounter',errorCounter: 'errorCounter'}";
+        //private string Ab = "{timedEvents: 'timedEvents',eventLogging: 'eventLogging',sessionContinue: 'sessionContinue'," +
+                         //"pauseTimestamp: 'pauseTimestamp',age: 'age',numEventNames: 'numEventNames'," +
+                         //"numPurchaseNames: 'numPurchaseNames',requestsMade: 'requestsMade',totalEventNames: 'totalEventNames'," +
+                         //"totalPurchaseNames: 'totalPurchaseNames',numEventsLogged: 'numEventsLogged'," +
+                         //"numPurchasesLogged: 'numPurchasesLogged',numErrorsLogged: 'numErrorsLogged',eventCounter: 'eventCounter'," +
+                         //"purchaseCounter: 'purchaseCounter',errorCounter: 'errorCounter'}";
 
     }
 }
